@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Smart Reminder</title>
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    height:100vh;
+    background:linear-gradient(to right,#667eea,#764ba2);
+}
+.container{
+    background:white;
+    width:100%;
+    height:100vh;
+    padding:30px;
+    box-sizing:border-box;
+}
+input,select,button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+}
+button{
+    background:#007bff;
+    color:white;
+    border:none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>📘 Student Smart Reminder</h2>
+
+<input id="name" placeholder="Student Name">
+<input id="roll" placeholder="Roll Number">
+
+<select id="branch">
+<option>CSE</option>
+<option>CSE(AI)</option>
+<option>DS</option>
+<option>CIVIL</option>
+<option>MECHANICAL</option>
+<option>OTHERS</option>
+</select>
+
+<select id="subject">
+<option>Maths</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Civil Engineering</option>
+<option>Mechanical Engineering</option>
+<option>Others</option>
+</select>
+
+<select id="type">
+<option>Task</option>
+<option>Other Activities</option>
+<option>Internal Lab</option>
+<option>External Lab</option>
+<option>Supply Exam</option>
+</select>
+
+<input id="place" placeholder="Exam Place">
+<input type="date" id="date">
+<input type="time" id="time">
+
+<button onclick="save()">Save Reminder</button>
+</div>
+
+<audio id="alarm" src="alarm.mp3"></audio>
+
+<script>
+let reminders = JSON.parse(localStorage.getItem("smartData")) || [];
+
+function save(){
+    reminders.push({
+        name:name.value,
+        roll:roll.value,
+        branch:branch.value,
+        subject:subject.value,
+        type:type.value,
+        place:place.value,
+        date:date.value,
+        time:time.value
+    });
+    localStorage.setItem("smartData",JSON.stringify(reminders));
+    alert("✅ Reminder Saved");
+}
+
+setInterval(()=>{
+    let now = new Date();
+    reminders.forEach(r=>{
+        let t = new Date(`${r.date} ${r.time}`);
+        if(Math.abs(now-t)<1000){
+            alarm.play();
+            alert("⏰ Reminder: "+r.subject);
+        }
+    });
+},1000);
+</script>
+
+</body>
+</html>
